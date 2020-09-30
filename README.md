@@ -1,1 +1,1 @@
-# big-game--survey-frontend
+# big-game-survey-frontend
