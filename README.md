@@ -2,6 +2,8 @@
 
 Plataforma desenvolvida em react com o intuito de mostrar os dados coletados pelo nosso aplicativo referentes à opnião de diversas pessoas relacionadas a alguns jogos e plataformas
 
+- Acessar: [Big-game-survey](https://biggamesurvey.vercel.app/)
+
 ## Telas
 
 ### HomePage
