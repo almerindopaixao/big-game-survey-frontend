@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import Axios from '../../services/Axios';
 import { URL_RECORDS } from '../../config/urls';
-import { RecordsResponse } from './type';
-import { formatDate } from '../../utils/helpers';
+import { RecordsResponse } from './types';
+import { formatDate } from './helpers';
 
 import Pagination from './Pagination';
 import Spinner from '../../components/Spinner';
+import Filters from '../../components/Filters';
 
 import './styles.css';
 
@@ -27,7 +27,7 @@ const Records = (): JSX.Element => {
   useEffect(() => {
     setAwaitReponse(true);
 
-    Axios.get(`${URL_RECORDS}?linesPerPage=7&page=${activePage}`)
+    Axios.get(`${URL_RECORDS}?page=${activePage}`)
       .then((response) => {
         setAwaitReponse(false);
         setRecordsResponse(response.data);
@@ -44,11 +44,7 @@ const Records = (): JSX.Element => {
 
   return (
     <div className="page-container">
-      <div className="filters-container records-actions">
-        <Link to="/charts">
-          <button className="action-filters">VER GRÁFICOS</button>
-        </Link>
-      </div>
+      <Filters link={'/charts'}>VER GRÁFICOS</Filters>
       {awaitResponse ? (
         <Spinner />
       ) : (

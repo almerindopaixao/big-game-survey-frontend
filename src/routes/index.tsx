@@ -6,6 +6,7 @@ import Records from '../pages/Records';
 import Page404 from '../pages/Page404';
 
 import Header from '../components/Header';
+import Charts from '../pages/Charts';
 
 const Routes = (): JSX.Element => (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const Routes = (): JSX.Element => (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/records" component={Records} />
+      <Route exact path="/charts" component={Charts} />
       <Route path="*" component={Page404} />
     </Switch>
   </BrowserRouter>
