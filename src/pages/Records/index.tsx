@@ -1,56 +1,89 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import Axios from '../../services/Axios';
+import { URL_RECORDS } from '../../config/urls';
+import { RecordsResponse } from './type';
+import { formatDate } from '../../utils/helpers';
+
+import Pagination from './Pagination';
+import Spinner from '../../components/Spinner';
 
 import './styles.css';
 
-const Records = (): JSX.Element => (
-  <div className="page-container">
-    <table className="records-table" cellPadding="0" cellSpacing="0">
-      <thead>
-        <tr>
-          <th>INSTANTE</th>
-          <th>NOME</th>
-          <th>IDADE</th>
-          <th>PLATAFORMA</th>
-          <th>GÊNERO</th>
-          <th>TÍTULO DO GAME</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>20/08/2020 13:45</td>
-          <td>Almerindo</td>
-          <td>19</td>
-          <td>XBOX</td>
-          <td>Ação - Aventura</td>
-          <td>The last of us</td>
-        </tr>
-        <tr>
-          <td>20/08/2020 13:45</td>
-          <td>Almerindo</td>
-          <td>19</td>
-          <td>XBOX</td>
-          <td>Ação - Aventura</td>
-          <td>The last of us</td>
-        </tr>
-        <tr>
-          <td>20/08/2020 13:45</td>
-          <td>Almerindo</td>
-          <td>19</td>
-          <td>XBOX</td>
-          <td>Ação - Aventura</td>
-          <td>The last of us</td>
-        </tr>
-        <tr>
-          <td>20/08/2020 13:45</td>
-          <td>Almerindo</td>
-          <td>19</td>
-          <td>XBOX</td>
-          <td>Ação - Aventura</td>
-          <td>The last of us</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-);
+const Records = (): JSX.Element => {
+  const [recordsResponse, setRecordsResponse] = useState<RecordsResponse>({
+    content: [],
+    config: {
+      totalPages: 0,
+    },
+  });
+
+  const [awaitResponse, setAwaitReponse] = useState(true);
+
+  const [activePage, setActivePage] = useState(0);
+
+  useEffect(() => {
+    setAwaitReponse(true);
+
+    Axios.get(`${URL_RECORDS}?linesPerPage=7&page=${activePage}`)
+      .then((response) => {
+        setAwaitReponse(false);
+        setRecordsResponse(response.data);
+      })
+      .catch((e) => {
+        setAwaitReponse(false);
+        toast.error(`Desculpe, não conseguimos obter os dados, ${e}`);
+      });
+  }, [activePage]);
+
+  const handlePageChange = (index: number): void => {
+    setActivePage(index);
+  };
+
+  return (
+    <div className="page-container">
+      <div className="filters-container records-actions">
+        <Link to="/charts">
+          <button className="action-filters">VER GRÁFICOS</button>
+        </Link>
+      </div>
+      {awaitResponse ? (
+        <Spinner />
+      ) : (
+        <table className="records-table" cellPadding="0" cellSpacing="0">
+          <thead>
+            <tr>
+              <th>INSTANTE</th>
+              <th>NOME</th>
+              <th>IDADE</th>
+              <th>PLATAFORMA</th>
+              <th>GÊNERO</th>
+              <th>TÍTULO DO GAME</th>
+            </tr>
+          </thead>
+          <tbody>
+            {recordsResponse.content.map((record) => (
+              <tr key={record.id}>
+                <td>{formatDate(record.moment)}</td>
+                <td>{record.name}</td>
+                <td>{record.age}</td>
+                <td className="text-secondary">{record.gamePlatform}</td>
+                <td>{record.genreName}</td>
+                <td className="text-primary">{record.gameTitle}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <Pagination
+        activePage={activePage}
+        goToPage={handlePageChange}
+        totalPages={recordsResponse.config.totalPages}
+      />
+    </div>
+  );
+};
 
 export default Records;
