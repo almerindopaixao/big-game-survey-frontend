@@ -2,6 +2,12 @@ import React from 'react';
 
 import './styles.css';
 
-const Spinner = (): JSX.Element => <div className="spinner"></div>;
+type Props = {
+  colorOfSpinner?: string;
+};
+
+const Spinner = ({ colorOfSpinner }: Props): JSX.Element => (
+  <div className={`spinner ${colorOfSpinner}`}></div>
+);
 
 export default Spinner;

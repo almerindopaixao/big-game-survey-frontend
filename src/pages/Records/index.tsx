@@ -27,7 +27,7 @@ const Records = (): JSX.Element => {
   useEffect(() => {
     setAwaitReponse(true);
 
-    Axios.get(`${URL_RECORDS}?page=${activePage}`)
+    Axios.get(`${URL_RECORDS}?linesPerPage=7&page=${activePage}`)
       .then((response) => {
         setAwaitReponse(false);
         setRecordsResponse(response.data);
@@ -46,7 +46,7 @@ const Records = (): JSX.Element => {
     <div className="page-container">
       <Filters link={'/charts'}>VER GRÁFICOS</Filters>
       {awaitResponse ? (
-        <Spinner />
+        <Spinner colorOfSpinner="spinner-record" />
       ) : (
         <table className="records-table" cellPadding="0" cellSpacing="0">
           <thead>
