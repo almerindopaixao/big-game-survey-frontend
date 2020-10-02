@@ -90,8 +90,8 @@ const Charts = (): JSX.Element => {
               <Chart
                 options={barOptions}
                 type="bar"
-                width="850"
-                height="650"
+                width="600"
+                height="350"
                 series={[{ data: barChartData }]}
               />
             )}
